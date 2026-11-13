@@ -1,0 +1,18 @@
+services:
+  db:
+    # Official Postgres image with pgvector preinstalled
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: vectordb01
+    ports:
+      - "5449:5432"
+    volumes:
+      # Any .sql file here runs automatically the first time the DB is created
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      # Keeps your data between restarts
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

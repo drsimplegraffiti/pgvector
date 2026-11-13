@@ -1,0 +1,63 @@
+@baseUrl = http://localhost:3000
+
+### Health check
+GET {{baseUrl}}/health
+
+### POST /documents — embed and store a single piece of text
+POST {{baseUrl}}/documents
+Content-Type: application/json
+
+{
+    "content": "To reset your password, click Forgot Password on the login page."
+}
+
+### POST /documents — office hours
+POST {{baseUrl}}/documents
+Content-Type: application/json
+
+{
+    "content": "Our office is open Monday to Friday, 9am to 5pm."
+}
+
+### POST /documents — payment methods
+POST {{baseUrl}}/documents
+Content-Type: application/json
+
+{
+    "content": "You can pay by credit card, bank transfer, or PayPal."
+}
+
+### GET /search — semantic search (different words than stored text)
+GET {{baseUrl}}/search?q=I%20forgot%20my%20login%20credentials&limit=5
+
+### GET /search — office hours query
+GET {{baseUrl}}/search?q=When%20can%20I%20visit%20the%20office&limit=5
+
+### GET /sources — list uploaded files and chunk counts
+GET {{baseUrl}}/sources
+
+### POST /upload — upload notes.txt (multipart)
+# The file content below is stored as one chunk and becomes searchable by source.
+POST {{baseUrl}}/upload
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="notes.txt"
+Content-Type: text/plain
+
+Our refund policy lets customers return any product within 30 days. Refunds are
+issued to the original payment method and take 5 to 7 business days.
+
+To reset your password, click "Forgot Password" on the login page. A reset link
+will be sent to your email and expires after 1 hour.
+
+Support is available Monday to Friday, 9am to 5pm. For urgent issues, use the
+live chat on our website or call the hotline.
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### GET /search — search within a specific file only
+GET {{baseUrl}}/search?q=how%20long%20do%20I%20wait%20for%20my%20money%20back&source=notes.txt&limit=5
+
+### DELETE /sources/:name — delete a file and all its chunks
+DELETE {{baseUrl}}/sources/notes.txt
